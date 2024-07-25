@@ -25,7 +25,7 @@ app.put("/requests/:id", updateRequest);
 app.delete("/requests/:id", deleteRequest);
 
 sequelize
-  .sync()
+  .authenticate()
   .then(() => {
     console.log("Database synchronized");
     app.listen(port, () => {
