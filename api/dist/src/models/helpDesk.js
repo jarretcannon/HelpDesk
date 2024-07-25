@@ -39,3 +39,4 @@ function RequestFactory(sequelize) {
         tableName: "requests",
     });
 }
+//# sourceMappingURL=helpDesk.js.map
