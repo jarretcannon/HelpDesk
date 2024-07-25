@@ -1,0 +1,130 @@
+.admin-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #343a40;
+  color: #fff;
+}
+
+.userForm {
+  padding: 30px;
+}
+
+.card-container {
+  padding: 30px;
+  position: relative;
+}
+
+h1 {
+  text-align: center;
+}
+
+.dropdown-item-red {
+  background-color: #ff4d4d;
+}
+
+.dropdown-item-orange {
+  background-color: #ff9900;
+}
+
+.dropdown-item-green {
+  background-color: #4caf50;
+}
+
+.dropdown-toggle-red {
+  background-color: #ff4d4d !important;
+  color: white !important;
+}
+
+.dropdown-toggle-orange {
+  background-color: #ff9900 !important;
+  color: white !important;
+}
+
+.dropdown-toggle-green {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.selected {
+  font-weight: bold;
+}
+
+.card-delete-btn,
+.card-description-toggle,
+.card-expand-btn {
+  position: absolute;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.card-email-btn {
+  border: none;
+  color: white;
+}
+
+.card-delete-btn {
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+}
+
+.card-delete-btn:hover {
+  color: #ff4d4d;
+}
+
+.card-email-btn {
+  bottom: 10px;
+  right: 10px;
+  background: #007bff;
+  color: white;
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.card-email-btn:hover {
+  background: #0056b3;
+}
+
+.card-description-toggle {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  padding: 0;
+  color: #007bff;
+}
+
+.card-description-toggle:hover {
+  color: #0056b3;
+}
+
+.card-container .expanded {
+  width: 100%;
+  height: auto;
+  max-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 9999;
+}
+
+.card-expand-btn {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+}
+
+.card-expand-btn:hover {
+  color: #ff9900;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+}
