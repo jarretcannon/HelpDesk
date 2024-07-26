@@ -13,8 +13,7 @@ import {
 RequestFactory(sequelize);
 
 const app = express();
-const port = process.env.PORT || 3000;
-
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -32,11 +31,17 @@ app.delete("/requests/:id", deleteRequest);
 sequelize
   .authenticate()
   .then(() => {
+    console.log("Connection has been established successfully.");
+    return sequelize.sync();
+  })
+  .then(() => {
     console.log("Database synchronized");
     app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+      console.log(`Server is running on port ${port}`);
     });
   })
   .catch((err) => {
     console.error("Error syncing database:", err);
   });
+
+export default sequelize;
