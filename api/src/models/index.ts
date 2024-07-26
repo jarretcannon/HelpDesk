@@ -1,15 +1,10 @@
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize(process.env.JAWSDB_URL as string);
-
-async function initializeDatabase() {
-  try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (err) {
-    console.error('Unable to connect to the database:', err);
-  }
-}
-initializeDatabase();
+const sequelize = process.env.JAWSDB_URL
+  ? new Sequelize(process.env.JAWSDB_URL)
+  : new Sequelize('zealthyDatabase', 'root', 'MartinD-15', {
+      host: 'localhost',
+      dialect: 'mysql',
+    });
 
 export default sequelize;
