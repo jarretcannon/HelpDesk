@@ -18,7 +18,6 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Route to handle root URL
 app.get("/", (req, res) => {
   res.send("Welcome to the Help Desk API");
 });

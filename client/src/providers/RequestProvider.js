@@ -4,7 +4,7 @@ import RequestContext from "../contexts/RequestContext";
 
 export const RequestProvider = (props) => {
   const [requests, setRequests] = useState([]);
-  const baseUrl = "http://localhost:3001/requests";
+  const baseUrl = "https://zealthydb-efa479bfcf5e.herokuapp.com/requests";
 
   useEffect(() => {
     async function fetchData() {
