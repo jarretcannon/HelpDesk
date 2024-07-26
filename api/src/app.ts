@@ -44,4 +44,14 @@ sequelize
     console.error("Error syncing database:", err);
   });
 
+process.on('uncaughtException', (err: any) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use`);
+    process.exit(1);
+  } else {
+    console.error('Unhandled exception', err);
+    process.exit(1);
+  }
+});
+
 export default sequelize;
