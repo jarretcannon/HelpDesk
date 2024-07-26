@@ -19,7 +19,7 @@ app.get("/requests/:id", requestController_1.getRequest);
 app.put("/requests/:id", requestController_1.updateRequest);
 app.delete("/requests/:id", requestController_1.deleteRequest);
 models_1.default
-    .sync()
+    .authenticate()
     .then(() => {
     console.log("Database synchronized");
     app.listen(port, () => {
