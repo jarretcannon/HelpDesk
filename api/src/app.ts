@@ -2,13 +2,8 @@ import express from "express";
 import cors from "cors";
 import sequelize from "./models";
 import { RequestFactory } from "./models/helpDesk";
-import {
-  getAllRequests,
-  createRequest,
-  getRequest,
-  updateRequest,
-  deleteRequest,
-} from "./controllers/requestController";
+import router from "./routes/routes";
+
 
 RequestFactory(sequelize);
 
@@ -18,11 +13,7 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
-app.get("/requests", getAllRequests);
-app.post("/requests", createRequest);
-app.get("/requests/:id", getRequest);
-app.put("/requests/:id", updateRequest);
-app.delete("/requests/:id", deleteRequest);
+app.use(router); 
 
 sequelize
   .sync()
@@ -35,3 +26,4 @@ sequelize
   .catch((err) => {
     console.error("Error syncing database:", err);
   });
+

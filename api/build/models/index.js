@@ -10,12 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-// Get database URL from environment variables
-const DATABASE_URL = process.env.DATABASE_URL || "mysql://root:password@localhost:3306/zealthyDatabase";
-// Create a new Sequelize instance with the database URL
-const sequelize = new sequelize_1.Sequelize(DATABASE_URL, {
+const sequelize = new sequelize_1.Sequelize("zealthyDatabase", "root", "MartinD-15", {
+    host: "localhost",
     dialect: "mysql",
-    logging: false, // Set to `true` if you want to see SQL queries in the logs
 });
 function initializeDatabase() {
     return __awaiter(this, void 0, void 0, function* () {

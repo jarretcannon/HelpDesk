@@ -7,17 +7,13 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const models_1 = __importDefault(require("./models"));
 const helpDesk_1 = require("./models/helpDesk");
-const requestController_1 = require("./controllers/requestController");
+const routes_1 = __importDefault(require("./routes/routes"));
 (0, helpDesk_1.RequestFactory)(models_1.default);
 const app = (0, express_1.default)();
 const port = 3001;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.get("/requests", requestController_1.getAllRequests);
-app.post("/requests", requestController_1.createRequest);
-app.get("/requests/:id", requestController_1.getRequest);
-app.put("/requests/:id", requestController_1.updateRequest);
-app.delete("/requests/:id", requestController_1.deleteRequest);
+app.use(routes_1.default);
 models_1.default
     .sync()
     .then(() => {
