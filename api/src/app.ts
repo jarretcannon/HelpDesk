@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the API");
 });
 
-app.use(router);
+app.use("/api", router);
 
 app.use((req, res) => {
   res.status(404).send("Not Found");
