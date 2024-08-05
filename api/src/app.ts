@@ -4,17 +4,23 @@ import sequelize from "./models";
 import { RequestFactory } from "./models/helpDesk";
 import router from "./routes/routes";
 
-
 RequestFactory(sequelize);
 
 const app = express();
-
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
 
-app.use(router); 
+app.get("/", (req, res) => {
+  res.send("Welcome to the API");
+});
+
+app.use(router);
+
+app.use((req, res) => {
+  res.status(404).send("Not Found");
+});
 
 sequelize
   .sync()
