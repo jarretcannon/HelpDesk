@@ -1,81 +1,79 @@
-import React, { useContext, useState } from "react";
-import { Button, Card, Dropdown } from "react-bootstrap";
+import React, { useContext, useState, useEffect } from "react";
+import { Button, Card, Form } from "react-bootstrap";
 import RequestContext from "../contexts/RequestContext";
+import { StatusDropdown } from "./Helpers";
 
 function AdminDashboard() {
   const { requests, updateRequest, deleteRequest } = useContext(RequestContext);
+  const [localRequests, setLocalRequests] = useState([]);
   const [selectedOption, setSelectedOption] = useState({});
-  const [openedCard, setOpenedCard] = useState(null);
+  const [sentStatus, setSentStatus] = useState({});
 
-  const handleSelect = (eventKey, requestId) => {
+  useEffect(() => {
+    setLocalRequests(requests);
+  }, [requests]);
+
+  const handleSelect = async (eventKey, requestId) => {
     setSelectedOption((prev) => ({
       ...prev,
       [requestId]: eventKey,
     }));
 
-    updateRequest(requestId, { status: eventKey });
+    await updateRequest(requestId, { status: eventKey });
+    updateLocalRequestStatus(requestId, eventKey);
   };
 
-  const handleDelete = (requestId) => {
+  const handleDelete = async (requestId) => {
     if (window.confirm("Are you sure you want to delete this request?")) {
-      deleteRequest(requestId);
+      await deleteRequest(requestId);
+      setLocalRequests((prev) =>
+        prev.filter((request) => request.helpId !== requestId)
+      );
     }
   };
 
-  const handleEmail = (request) => {
-    console.log(
-      `Would normally send email here to client's email: ${request.email}`
-    );
-    alert(`Would normally send email here to client's email: ${request.email}`);
+  const handleEmail = async (request) => {
+    console.log("Email would send here");
+
+    await updateRequest(request.helpId, { status: "In Progress" });
+    updateLocalRequestStatus(request.helpId, "In Progress");
+
+    setSelectedOption((prev) => ({
+      ...prev,
+      [request.helpId]: "In Progress",
+    }));
+
+    setSentStatus((prev) => ({
+      ...prev,
+      [request.helpId]: true,
+    }));
   };
 
-  const handleOpenCard = (requestId) => {
-    setOpenedCard(openedCard === requestId ? null : requestId);
+  const updateLocalRequestStatus = (requestId, newStatus) => {
+    setLocalRequests((prevRequests) =>
+      prevRequests.map((request) =>
+        request.helpId === requestId
+          ? { ...request, status: newStatus }
+          : request
+      )
+    );
   };
 
   const statusOrder = { New: 1, "In Progress": 2, Resolved: 3 };
 
-  const sortedRequests = requests.sort((a, b) => {
+  const sortedRequests = localRequests.sort((a, b) => {
     return (statusOrder[a.status] || 0) - (statusOrder[b.status] || 0);
   });
-
-  const getDropdownItemClass = (status) => {
-    switch (status) {
-      case "New":
-        return "dropdown-item-red";
-      case "In Progress":
-        return "dropdown-item-orange";
-      case "Resolved":
-        return "dropdown-item-green";
-      default:
-        return "";
-    }
-  };
-
-  const getDropdownToggleClass = (status) => {
-    switch (status) {
-      case "New":
-        return "dropdown-toggle-red";
-      case "In Progress":
-        return "dropdown-toggle-orange";
-      case "Resolved":
-        return "dropdown-toggle-green";
-      default:
-        return "";
-    }
-  };
 
   return (
     <div className="admin-dashboard-container">
       <h1>Admin Dashboard</h1>
       <div className="card-container">
-        {requests.length > 0 ? (
+        {localRequests.length > 0 ? (
           sortedRequests.map((request) => (
             <Card
               key={request.helpId}
-              className={`bg-dark text-light mb-3 ${
-                openedCard === request.helpId ? "opened" : ""
-              }`}
+              className="bg-dark text-light mb-3"
               style={{ position: "relative", overflow: "visible" }}
             >
               <button
@@ -84,87 +82,46 @@ function AdminDashboard() {
               >
                 &times;
               </button>
-              <Card.Header>{request.name}</Card.Header>
+              <Card.Header>
+                <strong>Request:</strong> {request.description}
+              </Card.Header>
               <Card.Body>
-                <Card.Text>
-                  {openedCard === request.helpId
-                    ? request.description
-                    : `${request.description.substring(0, 100)}...`}
-                </Card.Text>
-                <Dropdown
-                  onSelect={(eventKey) =>
-                    handleSelect(eventKey, request.helpId)
-                  }
-                >
-                  <Dropdown.Toggle
-                    variant="light"
-                    id={`dropdown-basic-${request.helpId}`}
-                    className={getDropdownToggleClass(
-                      selectedOption[request.helpId] || request.status
-                    )}
-                    style={{ zIndex: 1000 }}
-                  >
-                    {selectedOption[request.helpId] ||
-                      request.status ||
-                      "Status"}
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu style={{ zIndex: 1000 }}>
-                    <Dropdown.Item
-                      className={`${getDropdownItemClass("New")} ${
-                        selectedOption[request.helpId] === "New"
-                          ? "selected"
-                          : ""
-                      }`}
-                      eventKey="New"
-                    >
-                      New
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      className={`${getDropdownItemClass("In Progress")} ${
-                        selectedOption[request.helpId] === "In Progress"
-                          ? "selected"
-                          : ""
-                      }`}
-                      eventKey="In Progress"
-                    >
-                      In Progress
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      className={`${getDropdownItemClass("Resolved")} ${
-                        selectedOption[request.helpId] === "Resolved"
-                          ? "selected"
-                          : ""
-                      }`}
-                      eventKey="Resolved"
-                    >
-                      Resolved
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Card.Body>
-              <Card.Body
-                className="bg-dark text-light"
-                style={{ position: "relative" }}
-              >
-                <Button
-                  className="card-open-btn"
-                  onClick={() => handleOpenCard(request.helpId)}
-                >
-                  {openedCard === request.helpId ? "Close" : "Open"}
-                </Button>
-              </Card.Body>
-              {openedCard === request.helpId && (
-                <Card.Footer className="bg-dark text-light">
-                  Submitted: {new Date(request.createdAt).toLocaleString()}
+                <StatusDropdown
+                  requestId={request.helpId}
+                  status={request.status}
+                  selectedOption={selectedOption}
+                  handleSelect={handleSelect}
+                />
+                <Form>
+                  <Form.Group className="mt-3" controlId="response">
+                    <Form.Label>Response:</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={2}
+                      style={{ resize: "vertical", minHeight: "100px" }}
+                    />
+                  </Form.Group>
                   <Button
-                    className="card-email-btn"
+                    className="card-email-btn mt-2"
                     onClick={() => handleEmail(request)}
+                    disabled={sentStatus[request.helpId]}
                   >
-                    Email
+                    {sentStatus[request.helpId] ? "Sent ✔️" : "Send"}
                   </Button>
-                </Card.Footer>
-              )}
+                </Form>
+              </Card.Body>
+              <Card.Footer className="bg-dark text-light">
+                <div>
+                  <strong>Submitted:</strong>{" "}
+                  {new Date(request.createdAt).toLocaleString()}
+                </div>
+                <div>
+                  <strong>Email:</strong> {request.email}
+                </div>
+                <div>
+                  <strong>Name:</strong> {request.name}
+                </div>
+              </Card.Footer>
             </Card>
           ))
         ) : (

@@ -25,4 +25,3 @@ models_1.default
     .catch((err) => {
     console.error("Error syncing database:", err);
 });
-//# sourceMappingURL=app.js.map

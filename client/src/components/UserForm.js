@@ -2,6 +2,8 @@ import { useContext, useState } from "react";
 import RequestContext from "../contexts/RequestContext";
 
 import { Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
 
 function UserForm() {
   const [request, setRequest] = useState({
@@ -9,6 +11,8 @@ function UserForm() {
     email: "",
     description: "",
   });
+  const navigate = useNavigate();
+
 
   const { addRequest } = useContext(RequestContext);
 
@@ -24,7 +28,7 @@ function UserForm() {
     event.preventDefault();
     addRequest(request)
       .then(() => {
-        alert("Request sent. Someone will be getting back to you shortly.");
+        navigate('/alertpage')
         setRequest({ name: "", email: "", description: "" });
       })
       .catch((error) => {

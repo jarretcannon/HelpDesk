@@ -13,6 +13,7 @@ import { RequestProvider } from "./providers/RequestProvider";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import AlertPage from "./components/AlertPage";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function ThemedContent() {
       <main>
         <Routes>
           <Route path="/helpdesk" element={<UserForm />} />
+          <Route path="/AlertPage" element={<AlertPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/" element={<UserForm />} />
         </Routes>
@@ -58,5 +60,6 @@ function ThemedContent() {
     </div>
   );
 }
+
 
 export default App;

@@ -12,4 +12,3 @@ router.get("/requests/:id", requestController_1.getRequest);
 router.put("/requests/:id", requestController_1.updateRequest);
 router.delete("/requests/:id", requestController_1.deleteRequest);
 exports.default = router;
-//# sourceMappingURL=routes.js.map
