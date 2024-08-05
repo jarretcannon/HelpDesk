@@ -1,8 +1,13 @@
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize("zealthyDatabase", "root", "MartinD-15", {
-  host: "localhost",
-  dialect: "mysql",
+const sequelize = new Sequelize(process.env.DATABASE_URL || '', {
+  dialect: 'mysql',
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
 });
 
 async function initializeDatabase() {
@@ -13,6 +18,7 @@ async function initializeDatabase() {
     console.error("Unable to connect to the database:", err);
   }
 }
+
 initializeDatabase();
 
 export default sequelize;
