@@ -8,7 +8,8 @@ import router from "./routes/routes";
 RequestFactory(sequelize);
 
 const app = express();
-const port = 3001;
+
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -19,8 +20,8 @@ sequelize
   .sync()
   .then(() => {
     console.log("Database synchronized");
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
